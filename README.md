@@ -280,7 +280,7 @@ The included `sql/03_analytical_queries.sql` file provides key administrative qu
 
 | Member Name | Role | Responsibilities & Contributions |
 |---|---|---|
-| **Manikanta & Team** | Database Architect & Lead Developer | • Designed the 5-domain bounded relational model.<br>• Authored the complete MySQL 8.0 DDL schema (`01_schema_ddl.sql`).<br>• Implemented 26 Foreign Keys, 12 Unique Keys, and 28 Check Constraints.<br>• Designed and rendered the high-resolution ER Diagram.<br>• Authored analytical reporting queries and technical documentation. |
+| **Manikanta** | Database Architect & Lead Developer | • Designed the 5-domain bounded relational model.<br>• Authored the complete MySQL 8.0 DDL schema (`01_schema_ddl.sql`).<br>• Implemented 26 Foreign Keys, 12 Unique Keys, and 28 Check Constraints.<br>• Designed and rendered the high-resolution ER Diagram.<br>• Authored analytical reporting queries and technical documentation. |
 
 ---
 
