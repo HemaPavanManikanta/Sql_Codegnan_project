@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placement Preparation Platform — Database Video Presentation (10 Mins)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: #0b0f19;
+            color: #f1f5f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header-title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header-title h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #38bdf8;
+            margin-bottom: 6px;
+        }
+
+        .header-title p {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .player-container {
+            width: 100%;
+            max-width: 1200px;
+            background: #1e293b;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            border: 1px solid #334155;
+        }
+
+        .slide-viewport {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            background: #0f172a;
+        }
+
+        .slide-viewport img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: opacity 0.4s ease;
+        }
+
+        .controls-panel {
+            padding: 18px 24px;
+            background: #1e293b;
+            border-top: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: #334155;
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #38bdf8, #2563eb);
+            border-radius: 4px;
+            transition: width 0.1s linear;
+        }
+
+        .controls-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .btn-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        button {
+            background: #0f172a;
+            color: #f8fafc;
+            border: 1px solid #475569;
+            padding: 9px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background: #38bdf8;
+            color: #0f172a;
+            border-color: #38bdf8;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            border-color: #2563eb;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            border-color: #1d4ed8;
+            color: #ffffff;
+        }
+
+        .time-display {
+            font-size: 14px;
+            font-family: monospace;
+            color: #cbd5e1;
+            background: #0f172a;
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid #334155;
+        }
+
+        .slide-counter {
+            font-size: 14px;
+            font-weight: 600;
+            color: #38bdf8;
+        }
+
+        /* Script / Closed Caption Box */
+        .caption-box {
+            padding: 16px 24px;
+            background: #0f172a;
+            border-top: 1px solid #1e293b;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #94a3b8;
+            max-height: 90px;
+            overflow-y: auto;
+        }
+
+        .caption-box strong {
+            color: #e2e8f0;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* Playlist Grid */
+        .playlist-container {
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 25px;
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #334155;
+        }
+
+        .playlist-container h3 {
+            font-size: 16px;
+            color: #38bdf8;
+            margin-bottom: 15px;
+        }
+
+        .playlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 12px;
+        }
+
+        .playlist-item {
+            background: #0f172a;
+            border: 1px solid #334155;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .playlist-item:hover, .playlist-item.active {
+            border-color: #38bdf8;
+            background: #1e293b;
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
+        }
+
+        .playlist-item .p-num {
+            font-size: 11px;
+            color: #38bdf8;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .playlist-item .p-title {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #f1f5f9;
+            line-height: 1.3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-title">
+        <h1>Placement Preparation Platform — Database Video Presentation</h1>
+        <p>10-Minute Complete Architectural Walkthrough with AI Voiceover  |  MySQL 8.0.45</p>
+    </div>
+
+    <div class="player-container">
+        <!-- Viewport -->
+        <div class="slide-viewport">
+            <img id="current-slide" src="images/slide_01.png" alt="Slide Image">
+        </div>
+
+        <!-- Controls -->
+        <div class="controls-panel">
+            <div class="progress-bar-container" id="progress-bar-container" onclick="seekAudio(event)">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+
+            <div class="controls-row">
+                <div class="btn-group">
+                    <button onclick="prevSlide()">⏮ Previous</button>
+                    <button class="btn-primary" id="play-pause-btn" onclick="togglePlayPause()">▶ Play Presentation</button>
+                    <button onclick="nextSlide()">Next ⏭</button>
+                    <button onclick="restartPresentation()">🔄 Restart</button>
+                </div>
+
+                <div class="time-display" id="time-display">00:00 / 00:00</div>
+                <div class="slide-counter" id="slide-counter">Slide 1 of 10</div>
+            </div>
+        </div>
+
+        <!-- Live Voiceover Script Caption -->
+        <div class="caption-box" id="caption-box">
+            <strong>Voiceover Script & Narration:</strong>
+            <span id="caption-text">Press "Play Presentation" to begin the full 10-minute presentation with synchronized audio and slide transitions.</span>
+        </div>
+    </div>
+
+    <!-- Playlist / Navigation Grid -->
+    <div class="playlist-container">
+        <h3>Presentation Sections (10 Minutes Total • 1 Min Per Section)</h3>
+        <div class="playlist-grid" id="playlist-grid"></div>
+    </div>
+
+    <!-- Hidden Native Audio Player -->
+    <audio id="audio-player"></audio>
+
+    <script>
+        const slides = [
+            {
+                index: 1,
+                title: "1. Executive Architecture Overview",
+                image: "images/slide_01.png",
+                audio: "audio/audio_01.wav",
+                script: "Welcome to the architectural walkthrough of the Placement Preparation Platform database. In this comprehensive ten-minute presentation, we explore the design, engineering principles, and operational mechanics of placementdb, an enterprise-grade relational database running on MySQL 8.0 with the InnoDB storage engine. Higher education institutions face tremendous complexity in coordinating campus recruitment drives, tracking multi-category student readiness, evaluating automated coding submissions, and maintaining faculty mentorship records. Monolithic or flat structures frequently fail under such workloads. To address these demands, placementdb models an integrated ecosystem partitioned into five distinct bounded domains comprising twenty-four relational tables and one hundred and eighty-five columns. Every table is reinforced with explicit foreign keys, domain check constraints, and unique indexes to ensure zero orphan records and complete ACID transaction compliance. Let us begin our deep-dive into the architectural foundation of the platform."
+            },
+            {
+                index: 2,
+                title: "2. Complete ER Diagram Architecture",
+                image: "images/slide_02.png",
+                audio: "audio/audio_02.wav",
+                script: "Here we examine the complete Entity-Relationship architecture of placementdb. The system is partitioned into five decoupled bounded domains to maintain clean separation of concerns. First, the Identity and Academic Hub manages core platform users and student profiles. Second, the Corporate Recruitment Lifecycle handles company directories, campus drives, eligible department branches, and candidate applications. Third, the Coding Sandbox Judge powers an automated problem-solving environment complete with sample and hidden test suites. Fourth, Company-Specific Preparation Tracks provide a four-tier hierarchical syllabus decomposing tracks into rounds, topics, and curated interview questions. Finally, the Quiz and Mentorship ecosystem manages timed aptitude evaluations, AI and peer mock interviews, faculty counseling notes, and immutable administrative audit logs. Across these five domains, twenty-six foreign key constraints govern relational lifecycles, guaranteeing referential integrity from student onboarding through to final corporate job offers."
+            },
+            {
+                index: 3,
+                title: "3. Identity & Student Academic Hub",
+                image: "images/slide_03.png",
+                audio: "audio/audio_03.wav",
+                script: "Moving to Domain One, we explore the Identity and Student Academic Hub. At the root of platform security is the users table, storing primary credentials, email identifiers, BCrypt password hashes, and user roles enforced by a check constraint to Student, Mentor, or TPO. Crucially, academic profile data is separated into the student_profiles table, which shares user_id as its primary key in an exact one-to-one relationship with the users table. This shared primary key pattern eliminates redundant surrogate identifiers and guarantees that an academic profile cannot exist without a verified user account. The student_profiles table enforces institutional roll number uniqueness, department affiliation, graduation year, and academic CGPA bounded between zero and ten. Furthermore, the readiness_scores table tracks composite four-tier metrics covering coding, aptitude, and communication scores, providing placement officers with instant, weighted performance indicators for every student."
+            },
+            {
+                index: 4,
+                title: "4. Recruitment Lifecycle & Drives",
+                image: "images/slide_04.png",
+                audio: "audio/audio_04.wav",
+                script: "Domain Two governs the Corporate and Campus Recruitment Lifecycle. The companies table catalogs recruiting organizations, categorizing them into tiers such as Tier-1, Product, or Service firms. Placement drives hosted by these companies are modeled in the placement_drives table, which records package offerings in Lakhs Per Annum, minimum CGPA eligibility cutoffs, drive dates, and drive statuses ranging from Upcoming to Active and Completed. To accommodate academic branch restrictions, the drive_eligible_departments table normalizes branch eligibility, using a composite unique constraint across drive_id and department to prevent duplicate mappings. When candidates participate, records are created in drive_applications. Here, a vital composite unique key on student_id and drive_id guarantees that a candidate can submit at most one application per drive, while an explicit check constraint controls the progressive application status from Applied to Shortlisted and Offered."
+            },
+            {
+                index: 5,
+                title: "5. Coding Sandbox & Judge Engine",
+                image: "images/slide_05.png",
+                audio: "audio/audio_05.wav",
+                script: "Domain Three represents the algorithmic heart of the platform: the Coding Assessment and Automated Judge Engine. The problems table serves as an extensive problem repository, storing titles, URL slugs, problem statements in long text, algorithmic categories, execution time limits, and memory constraints. Each problem links one-to-many with the test_cases table. Here, an is_sample boolean flag differentiates public sample test cases visible in the student editor from secure, hidden test cases reserved for automated grading. When a student executes code in Java, Python, or C++, a record is inserted into the submissions table. The judging engine updates the execution status, memory consumption, execution runtime, and verdict, strictly validated against standard outcomes including Accepted, Wrong Answer, Time Limit Exceeded, and Runtime Error. Deleting a problem automatically cascades and cleans up all associated test suites and student submissions."
+            },
+            {
+                index: 6,
+                title: "6. Company Tracks & Question Bank",
+                image: "images/slide_06.png",
+                audio: "audio/audio_06.wav",
+                script: "Domain Four introduces Company-Specific Preparation Tracks and the Curated Question Bank, structured as a disciplined four-tier relational hierarchy. At Level One, company_tracks defines company-tailored curricula, such as Amazon SDE or Google SWE tracks, protected by a composite unique key on company_id and track_name. At Level Two, company_track_rounds sequences recruitment stages, including Online Assessments, Technical Interviews, and HR discussions, with a composite unique key ensuring proper round order. At Level Three, company_track_topics maps syllabus requirements, like Dynamic Programming or Operating Systems, into each round without duplicate topics. Finally, Level Four consists of interview_questions, storing problem texts, solution walkthroughs, difficulty tiers, and question categories. This structured decomposition enables students to follow targeted, employer-specific preparation paths with high clarity and focused practice."
+            },
+            {
+                index: 7,
+                title: "7. Quiz & Governance Ecosystem",
+                image: "images/slide_07.png",
+                audio: "audio/audio_07.wav",
+                script: "Domain Five encompasses the Assessment Engine, Mock Interview System, and Faculty Governance. The quiz subsystem features quiz_questions with four multiple-choice options and validated correct answers. Students attempt timed evaluations logged in quiz_attempts, with individual question selections recorded in quiz_attempt_answers under composite uniqueness to prevent duplicate responses. Parallel to this, the mock interview platform coordinates AI, peer, and faculty interview sessions, capturing live student answers and rubric feedback in mock_interview_answers. Crucially, a restrict constraint prevents deleting students with ongoing interview sessions. For faculty oversight, mentorship_notes captures one-to-one counseling advice, resume_evaluations stores ATS scores, and student_badges incentivizes student achievement. Additionally, audit_logs maintains an immutable record of administrative actions, using an ON DELETE SET NULL strategy to preserve historical governance even if user accounts are removed."
+            },
+            {
+                index: 8,
+                title: "8. Referential Integrity & Constraints",
+                image: "images/slide_08.png",
+                audio: "audio/audio_08.wav",
+                script: "Data integrity is the paramount hallmark of an enterprise database, and placementdb achieves this through rigorous constraint engineering. Twenty-eight check constraints validate data boundaries directly within the MySQL engine, enforcing role enumerations, CGPA limits, academic year bounds, score percentages, and drive statuses. Twelve unique constraints prevent business anomalies, including duplicate email logins, conflicting roll numbers, repeated company track names, duplicate job applications, and redundant badge awards. Furthermore, referential integrity is orchestrated across twenty-six foreign key constraints with three purposeful deletion strategies: nineteen constraints employ ON DELETE CASCADE for clean lifecycle teardown; two constraints utilize ON DELETE SET NULL to protect historical audit and evaluation logs; and five constraints enforce ON DELETE RESTRICT to prevent catastrophic accidental deletions of active corporate partners or quiz questions."
+            },
+            {
+                index: 9,
+                title: "9. Analytical Queries & Reporting",
+                image: "images/slide_09.png",
+                audio: "audio/audio_09.wav",
+                script: "In Domain Nine, we evaluate the database's analytical query capabilities, which provide actionable intelligence to university leadership. Query One calculates a comprehensive Student Readiness Index. By joining users, academic profiles, readiness scores, and earned badges, it correlates academic CGPA with practical coding and communication performance, sorting candidates by overall readiness so placement officers can instantly identify top talent. Query Two analyzes the Corporate Recruitment Funnel across placement drives. It aggregates total candidate applications, counts shortlisted candidates, and calculates final job offers made per company, comparing conversion metrics against salary packages in Lakhs Per Annum. These optimized queries utilize InnoDB B-tree secondary indexes on foreign keys, delivering instant aggregation even across tens of thousands of student records without locking write transactions."
+            },
+            {
+                index: 10,
+                title: "10. JPA Parity & Future Scaling",
+                image: "images/slide_10.png",
+                audio: "audio/audio_10.wav",
+                script: "We conclude our architectural tour by examining Spring Boot JPA parity, performance optimizations, and future scalability. The placementdb DDL is engineered to mirror modern backend entity models, utilizing JPA annotations such as MapsId for shared primary keys, composite unique constraints, and creation timestamps for automated lifecycle management. The database is production-tuned for MySQL InnoDB with row-level locking, foreign key integrity, and utf8mb4 full Unicode precision. Looking toward future scale, the schema is designed for seamless horizontal growth: read queries can be routed to MySQL Read Replicas, submission tables can be partitioned by academic year as volume exceeds millions of records, and Redis caching can deliver sub-ten-millisecond lookups for company tracks. In summary, placementdb provides a verified, resilient, and enterprise-grade relational foundation for modern university placement and student career acceleration."
+            }
+        ];
+
+        let currentIndex = 0;
+        let isPlaying = false;
+        const audioPlayer = document.getElementById('audio-player');
+        const currentSlideImg = document.getElementById('current-slide');
+        const playBtn = document.getElementById('play-pause-btn');
+        const timeDisplay = document.getElementById('time-display');
+        const slideCounter = document.getElementById('slide-counter');
+        const progressFill = document.getElementById('progress-fill');
+        const captionText = document.getElementById('caption-text');
+        const playlistGrid = document.getElementById('playlist-grid');
+
+        // Initialize playlist UI
+        function initPlaylist() {
+            playlistGrid.innerHTML = '';
+            slides.forEach((slide, i) => {
+                const item = document.createElement('div');
+                item.className = `playlist-item ${i === 0 ? 'active' : ''}`;
+                item.id = `playlist-item-${i}`;
+                item.onclick = () => loadSlide(i, true);
+                item.innerHTML = `
+                    <div class="p-num">PART ${slide.index} • ~1 MIN</div>
+                    <div class="p-title">${slide.title}</div>
+                `;
+                playlistGrid.appendChild(item);
+            });
+        }
+
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "00:00";
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function loadSlide(index, autoPlay = false) {
+            if (index < 0 || index >= slides.length) return;
+            currentIndex = index;
+
+            const slide = slides[currentIndex];
+            currentSlideImg.src = slide.image;
+            audioPlayer.src = slide.audio;
+            slideCounter.textContent = `Slide ${slide.index} of ${slides.length}`;
+            captionText.textContent = slide.script;
+
+            // Highlight playlist item
+            document.querySelectorAll('.playlist-item').forEach((el, idx) => {
+                el.classList.toggle('active', idx === currentIndex);
+            });
+
+            audioPlayer.load();
+            if (autoPlay) {
+                audioPlayer.play().then(() => {
+                    isPlaying = true;
+                    playBtn.textContent = '⏸ Pause Presentation';
+                }).catch(err => {
+                    console.log("Audio play blocked by browser:", err);
+                });
+            }
+        }
+
+        function togglePlayPause() {
+            if (isPlaying) {
+                audioPlayer.pause();
+                isPlaying = false;
+                playBtn.textContent = '▶ Resume Presentation';
+            } else {
+                audioPlayer.play().then(() => {
+                    isPlaying = true;
+                    playBtn.textContent = '⏸ Pause Presentation';
+                }).catch(e => {
+                    console.error("Autoplay prevented:", e);
+                });
+            }
+        }
+
+        function nextSlide() {
+            if (currentIndex < slides.length - 1) {
+                loadSlide(currentIndex + 1, isPlaying);
+            }
+        }
+
+        function prevSlide() {
+            if (currentIndex > 0) {
+                loadSlide(currentIndex - 1, isPlaying);
+            }
+        }
+
+        function restartPresentation() {
+            loadSlide(0, true);
+        }
+
+        function seekAudio(e) {
+            const rect = document.getElementById('progress-bar-container').getBoundingClientRect();
+            const pos = (e.clientX - rect.left) / rect.width;
+            audioPlayer.currentTime = pos * audioPlayer.duration;
+        }
+
+        // Event Listeners for Audio
+        audioPlayer.addEventListener('timeupdate', () => {
+            const current = audioPlayer.currentTime || 0;
+            const duration = audioPlayer.duration || 1;
+            const pct = (current / duration) * 100;
+            progressFill.style.width = `${pct}%`;
+            timeDisplay.textContent = `${formatTime(current)} / ${formatTime(duration)}`;
+        });
+
+        audioPlayer.addEventListener('ended', () => {
+            if (currentIndex < slides.length - 1) {
+                loadSlide(currentIndex + 1, true); // Auto-advance to next slide
+            } else {
+                isPlaying = false;
+                playBtn.textContent = '🔄 Replay Presentation';
+            }
+        });
+
+        // Initialize on page load
+        initPlaylist();
+        loadSlide(0, false);
+    </script>
+</body>
+</html>
