@@ -11,6 +11,10 @@ A relational database engineering project developed for an enterprise **Placemen
 
 This repository contains the standalone, production-ready MySQL database schema (`placementdb`), seed data, analytical queries, entity-relationship models, and documentation. It can be deployed directly on any MySQL 8.0+ server or cloud database service (Amazon RDS, Google Cloud SQL, Azure Database for MySQL).
 
+> 🎬 **Live Interactive Video Presentation (10 Minutes with AI Voiceover):**  
+> 👉 **[Watch & Listen Live on GitHub Pages](https://HemaPavanManikanta.github.io/Sql_Codegnan_project/video_presentation/)**  
+> *(Includes 10 synchronized HD slides, full AI narration tracks, live closed captions, and navigation controls)*
+
 ---
 
 ## 📑 Table of Contents
